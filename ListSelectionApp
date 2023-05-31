@@ -1,0 +1,99 @@
+package Lb7;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class ListSelectionApp extends JFrame {
+    private JList<String> sourceList;
+    private JList<String> targetList;
+    private DefaultListModel<String> sourceModel;
+    private DefaultListModel<String> targetModel;
+
+    public ListSelectionApp() {
+        super("List Selection App");
+
+        // Создание моделей списка
+        sourceModel = new DefaultListModel<>();
+        targetModel = new DefaultListModel<>();
+
+        // Заполнение списков данными
+        sourceModel.addElement("Eazy-E");
+        sourceModel.addElement("Ice Cube");
+        sourceModel.addElement("Dr. Dre");
+        sourceModel.addElement("MC Ren");
+        sourceModel.addElement("DJ Yella");
+        sourceModel.addElement("The D.O.C.");
+        sourceModel.addElement("Arabian Prince");
+        sourceModel.addElement("DJ Speed");
+
+        // Создание списков и установка моделей
+        targetList = new JList<>(targetModel);
+        sourceList = new JList<>(sourceModel);
+
+
+        
+        // Создание кнопок для перемещения элементов
+        JButton addButton = new JButton(">");
+        JButton removeButton = new JButton("<");
+
+        
+        // Обработчик событий для кнопки ">"
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Получение выбранного элемента из списка и добавление его в другой список
+                String selectedValue = sourceList.getSelectedValue();
+                if (selectedValue != null) {
+                    sourceModel.removeElement(selectedValue);
+                    targetModel.addElement(selectedValue);
+                }
+            }
+        });
+
+        
+        // Обработчик событий для кнопки "<"
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Получение выбранного элемента из списка и удаление его из другого списка
+                String selectedValue = targetList.getSelectedValue();
+                if (selectedValue != null) {
+                    targetModel.removeElement(selectedValue);
+                    sourceModel.addElement(selectedValue);
+                }
+            }
+        });
+
+        
+        // Создание панелей для размещения компонентов
+        JPanel sourcePanel = new JPanel(new BorderLayout());
+        sourcePanel.setBorder(BorderFactory.createTitledBorder("Available Items"));
+        sourcePanel.add(new JScrollPane(sourceList), BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 1));
+        buttonPanel.add(addButton);
+        buttonPanel.add(removeButton);
+
+        JPanel targetPanel = new JPanel(new BorderLayout());
+        targetPanel.setBorder(BorderFactory.createTitledBorder("Selected Items"));
+        targetPanel.add(new JScrollPane(targetList), BorderLayout.CENTER);
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(sourcePanel, BorderLayout.WEST);
+        mainPanel.add(buttonPanel, BorderLayout.CENTER);
+        mainPanel.add(targetPanel, BorderLayout.EAST);
+
+        
+        // Установка основного контейнера и размеров окна
+        setContentPane(mainPanel);
+        setSize(400, 300);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public static void main(String[] args) {
+        ListSelectionApp app = new ListSelectionApp();
+        app.setVisible(true);
+    }
+}
